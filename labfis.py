@@ -12,7 +12,7 @@ class labfloat:
         if self.uncertainty == 0:
             return("{:g}".format(self.mean))
         else:
-            su = str(self.uncertainty)
+            su = "%.16f" % self.uncertainty
             i = su.find(".")
             if i == -1:
                 r = - len(su) + 1
