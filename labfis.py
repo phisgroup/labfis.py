@@ -57,13 +57,13 @@ class labfloat:
 
     def __eq__(self, other):
         if isinstance(other, labfloat):
-            return abs(self.mean - other.mean) < 2 * (self.uncertainty - other.uncertainty)
+            return abs(self.mean - other.mean) < 2 * (self.uncertainty + other.uncertainty)
         if isinstance(other, Number):
             return abs(self.mean - other) < 2 * self.uncertainty
 
     def __ne__(self, other):
         if isinstance(other, labfloat):
-            return abs(self.mean - other.mean) > 3 * (self.uncertainty - other.uncertainty)
+            return abs(self.mean - other.mean) > 3 * (self.uncertainty + other.uncertainty)
         if isinstance(other, Number):
             return abs(self.mean - other) > 3 * self.uncertainty
 
