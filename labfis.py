@@ -26,6 +26,9 @@ class labfloat:
 
         if args:
             if len(args) == 1:
+                if isinstance(args[0],list):
+                    self.list(args[0])
+                else:
                     mean = args[0]
             elif len(args) == 2:
                 mean = args[0]
