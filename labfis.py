@@ -1,38 +1,115 @@
 from math import floor, ceil, trunc, log, log10
 from numbers import Number
 
-class labfloat:
-    errsupport = "Essa operação não é suportado nesta classe, apenas as operações mencionadas na apostila de Laboratório de Física 2 do IFSC."
-
-    def __init__(self, mean = 0.0, uncertainty = 0.0):
-        self.mean = float(mean)
-        self.uncertainty = float(abs(uncertainty))
+class LabFloatError(Exception):
+    def __init__(self, *args):
+        if args:
+            if args[0] == 0:
+                self.message = "Essa operação não é suportado nesta classe, apenas as operações mencionadas na apostila de Laboratório de Física 2 do IFSC."
+            elif args[0] == 1:
+                self.message = "Too many args in list, expected '[...,[val,err],...]' got '{0}'".format(args[1])
+            elif isinstance(args[0],str):
+                self.message = "{0}{1}".format(args[0],args[1])
+        else:
+            self.message = None
 
     def __str__(self):
-        if self.uncertainty == 0:
-            return("{:g}".format(self.mean))
+        if self.message:
+            return '{0}'.format(self.message)
         else:
-            su = "%.16f" % self.uncertainty
-            i = su.find(".")
-            if i == -1:
-                r = - len(su) + 1
-                m = round(self.mean, r)
-                u = round(self.uncertainty, r)
-                return("({:g} ± {:g})".format(m, u))
+            return 'LabFloatError has been raised'
+
+class labfloat:
+    def __init__(self, *args, **kwargs):
+        mean = kwargs.get('mean',0.0)
+        uncertainty = kwargs.get('uncertainty',0.0)
+
+        if args:
+            if len(args) == 1:
+                    mean = args[0]
+            elif len(args) == 2:
+                mean = args[0]
+                uncertainty = args[1]
             else:
-                r = -i
-                r += 1
-                for digit in su:
-                    if digit == "0":
-                        r += 1
-                    elif digit != ".":
-                        m = round(self.mean, r)
-                        u = round(self.uncertainty, r)
-                        return("({:g} ± {:g})".format(m, u))
+                raise LabFloatError("Too many arguments, expected (val,err), got: ",args)
+
+        self.mean = float(mean)
+        self.uncertainty = abs(float(uncertainty))
+
+    @classmethod
+    def list(cls,listargs):
+        listlabfloat = []
+        for j in range(len(listargs)):
+            if len(listargs[j]) == 2:
+                listlabfloat += [cls(listargs[j][0],listargs[j][1])]
+            elif len(listargs[j]) == 1:
+                listlabfloat += [cls(listargs[j][0])]
+            elif len(listargs[j]) > 2:
+                raise LabFloatError(1,listargs[j])
+        return(listlabfloat)
+
+    def format(self):
+        su = "%.16f" % self.uncertainty
+        i = su.find(".")
+        if i == -1:
+            r = - len(su) + 1
+            m = round(self.mean, r)
+            u = round(self.uncertainty, r)
+            return((m,u))
+        else:
+            r = -i
+            r += 1
+            for digit in su:
+                if digit == "0":
+                    r += 1
+                elif digit != ".":
+                    m = round(self.mean, r)
+                    u = round(self.uncertainty, r)
+                    return((m,u))
 
         m = round(self.mean, r)
         u = round(self.uncertainty, r)
-        return("({:g} ± {:g})".format(m, u))
+        return((m,u))
+
+    def split(self):
+        if self.uncertainty == 0:
+            return(["{:g}".format(self.mean)])
+        else:
+            m, u = self.format()
+            return(["{:g}".format(m),"{:g}".format(u)])
+    
+    def tex(self):
+        val = self.split()
+        if len(val) == 1:
+            m = val[0].split("e")
+            if len(m) > 1:
+                m = m[0]+"\cdot 10^{"+m[1]+"}"
+            else:
+                m = m[0]
+            return("{0}".format(m))
+        else:
+            m,u = val
+            m = m.split("e")
+            u = u.split("e")
+            if len(m) > 1:
+                m = m[0]+"\cdot 10^{"+m[1]+"}"
+            else:
+                m = m[0]
+            if len(u) > 1:
+                u = u[0]+"\cdot 10^{"+u[1]+"}"
+            else:
+                u = u[0]
+            return("({0}\, \pm \,{1})".format(m, u))
+
+    def __str__(self):
+        val = self.split()
+        if len(val) == 1:
+            return("{0}".format(val[0]))
+        else:
+            return("({0} ± {1})".format(*val))
+
+    def __repr__(self):
+        return self.__str__()
 
     def __pos__(self):
         return self
@@ -156,13 +233,13 @@ class labfloat:
 
     def __pow__(self, other):
         if isinstance(other, labfloat):
-            raise Exception(self.errsupport)
+            raise LabFloatError(0)
         if isinstance(other, Number):
             return labfloat(self.mean ** other, other * self.mean ** (other-1) * self.uncertainty)
 
     def __rpow__(self, other):
         if isinstance(other, labfloat):
-            raise Exception(self.errsupport)
+            raise LabFloatError(0)
         if isinstance(other, (float, int, hex, oct, complex)):
             return labfloat(other ** self.mean, other ** self.mean * log(other) * self.uncertainty)
 
