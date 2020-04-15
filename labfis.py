@@ -26,15 +26,12 @@ class labfloat:
 
         if args:
             if len(args) == 1:
-                if isinstance(args[0],list):
-                    self.list(args[0])
-                else:
-                    mean = args[0]
+                mean = args[0]
             elif len(args) == 2:
                 mean = args[0]
                 uncertainty = args[1]
             else:
-                raise LabFloatError("Too many arguments, expected (val,err), got: ",args)
+                raise LabFloatError("Too many arguments, expected (val,err) or ([(val,err),...]), got: ",args)
 
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
@@ -81,17 +78,36 @@ class labfloat:
             m, u = self.format()
             return(["{:g}".format(m),"{:g}".format(u)])
     
-    def tex(self):
-        val = self.split()
-        if len(val) == 1:
-            m = val[0].split("e")
+    def tex(self,*args,**kwargs):
+        precision = kwargs.get('precision')
+        if args:
+            if len(args) == 2:
+                precision = args
+            elif len(args) > 2:
+                raise LabFloatError("Too many arguments, expected: (precision) or (mean precision,err precision) got: ",args)
+            else:
+                precision = [args[0],args[0]]
+
+        if self.uncertainty == 0:
+            if precision:
+                precision[0] = str(precision[0])
+                m = eval("'{:."+precision[0]+"e}'.format(self.mean)")
+            else:
+                m = self.split()[0]
+            m = m.split("e")
             if len(m) > 1:
                 m = m[0]+"\cdot 10^{"+m[1]+"}"
             else:
                 m = m[0]
             return("{0}".format(m))
         else:
-            m,u = val
+            if precision:
+                precision = (str(precision[0]),str(precision[1]))
+                m, u = self.format()
+                m = eval("'{:."+precision[0]+"e}'.format(m)")
+                u = eval("'{:."+precision[1]+"e}'.format(u)")
+            else:
+                m, u = self.split()
             m = m.split("e")
             u = u.split("e")
             if len(m) > 1:
