@@ -44,6 +44,7 @@ URL             = "https://github.com/phisgroup/labfis.py"
 DOWNLOAD_URL    = "https://pypi.org/project/labfis/"
 THEME_NAME      = "Fusion"
 COPYRIGHT       = "Copyright (C) 2020, labfis"
+LICENSE         = "MIT"
 
 
 classifiers = [
@@ -63,7 +64,8 @@ setup(name=APP_NAME,
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     url=URL,
-    download_url=DOWNLOAD_URL
+    download_url=DOWNLOAD_URL,
+    license=LICENSE,
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
