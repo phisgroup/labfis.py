@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+.installed.cfg
+*.egg-info/
+*.egg
+_build/
+build/
+develop-eggs/
+eggs/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+tmp/
+temp/
+Temp/
+
+# Project files
+.project
+.pydevproject
+.pydevproject*
+.pydevproject.*
+.pydevproject.bak*
+.settings
+.vscode
+.spyproject*
+*.dot
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.p
+
+# Backup and temporarily files
+*.*~
+*.bak
+*.bkp
+*.tmp
+*.current
+*.old
+*.orig
+*.*orig
+*OLD*
+*.tmp.*
