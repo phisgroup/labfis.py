@@ -48,13 +48,17 @@ LICENSE         = "MIT"
 
 
 classifiers = [
-    'Development Status :: 4 - Beta',
-    'Framework :: labfis',
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Education',
+    'Intended Audience :: Science/Research',
     'Intended Audience :: End Users/Desktop',
     'Intended Audience :: Developers',
     'Operating System :: Microsoft :: Windows',
     'Operating System :: POSIX',
-    'Programming Language :: Python 2.7 :: Python 3 :: Python 3.8']
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8']
 
 python_ver = '>=2.7'
 
