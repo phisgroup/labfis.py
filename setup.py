@@ -31,14 +31,17 @@ def find_version(*file_paths):
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
 
+with open("README.md", "r") as pd:
+    long_description = pd.read()
+
 version = find_version("labfis", "__init__.py")
-long_description = "Adds a new float class type with an float and uncertainty value"
 
 APP_NAME        = "labfis"
 APP_DESCRIPTION = "Adds a new float type with uncertainty"
 AUTHOR          = "Hendrik Dumith Louzada, João Carlos Rodrigues Júnior"
 AUTHOR_EMAIL    = "hendriklouzada@gmail.com, jc.rodrigues1997@usp.br"
 URL             = "https://github.com/phisgroup/labfis.py"
+DOWNLOAD_URL    = "https://pypi.org/project/labfis/"
 THEME_NAME      = "Fusion"
 COPYRIGHT       = "Copyright (C) 2020, labfis"
 
@@ -60,7 +63,9 @@ setup(name=APP_NAME,
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     url=URL,
+    download_url=DOWNLOAD_URL
     long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=find_packages(),
     classifiers=classifiers,
     python_requires=python_ver,
