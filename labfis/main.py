@@ -129,6 +129,10 @@ class labfloat:
 
     def __repr__(self):
         return self.__str__()
+    
+    def __getitem__(self, idx):
+        vals = [self.mean,self.uncertainty]
+        return vals[idx]
 
     def __pos__(self):
         return self
