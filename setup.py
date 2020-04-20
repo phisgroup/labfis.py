@@ -38,7 +38,7 @@ APP_NAME        = "labfis"
 APP_DESCRIPTION = "Adds a new float type with uncertainty"
 AUTHOR          = "Hendrik Dumith Louzada, João Carlos Rodrigues Júnior"
 AUTHOR_EMAIL    = "hendriklouzada@gmail.com, jc.rodrigues1997@usp.br"
-URL             = "https://github.com/Ovenbird-j/labfis.py"
+URL             = "https://github.com/phisgroup/labfis.py"
 THEME_NAME      = "Fusion"
 COPYRIGHT       = "Copyright (C) 2020, labfis"
 
