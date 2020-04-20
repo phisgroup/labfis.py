@@ -6,5 +6,5 @@ To get this library on google colaboratory:
 ```
 !curl --remote-name \
      -H 'Accept: application/vnd.github.v3.raw' \
-     --location https://raw.githubusercontent.com/Ovenbird-j/labfis.py/master/labfis/main.py
+     --location https://raw.githubusercontent.com/phisgroup/labfis.py/master/labfis/main.py
 ```
