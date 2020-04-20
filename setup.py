@@ -48,7 +48,7 @@ LICENSE         = "MIT"
 
 
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Education',
     'Intended Audience :: Science/Research',
     'Intended Audience :: End Users/Desktop',
