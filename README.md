@@ -6,7 +6,7 @@ Small library (currently only one class) for uncertainty calculations and error 
 
 The uncertainty calculations are in accordance with gaussian’s propagation, as calculated by an analytical method:
 
-$$\Delta_f = \sqrt{\left(\frac{\partial f}{\partial x}\right)^2{\Delta_x}^2 + \left(\frac{\partial f}{\partial y}\right)^2{\Delta_y}^2 + \left(\frac{\partial f}{\partial z}\right)^2{\Delta_z}^2 + ...}$$
+![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5CDelta_f%20%3D%20%5Csqrt%7B%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%5Cright%29%5E2%7B%5CDelta_x%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%5Cright%29%5E2%7B%5CDelta_y%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%5Cright%29%5E2%7B%5CDelta_z%7D%5E2%20&plus;%20...%7D)
 
 Made by and for Physics Laboratory students in IFSC, who can't use uncertainties.py because of mean’s absolute deviation used in its calculation.
 
