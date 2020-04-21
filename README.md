@@ -6,7 +6,9 @@ Small library (currently only one class) for uncertainty calculations and error 
 
 The uncertainty calculations are in accordance with gaussian’s propagation, as calculated by an analytical method:
 
-![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5CDelta_f%20%3D%20%5Csqrt%7B%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%5Cright%29%5E2%7B%5CDelta_x%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%5Cright%29%5E2%7B%5CDelta_y%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%5Cright%29%5E2%7B%5CDelta_z%7D%5E2%20&plus;%20...%7D)
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?%5Cdpi%7B120%7D%20%5CDelta_f%20%3D%20%5Csqrt%7B%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%5Cright%29%5E2%7B%5CDelta_x%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%5Cright%29%5E2%7B%5CDelta_y%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%5Cright%29%5E2%7B%5CDelta_z%7D%5E2%20&plus;%20...%7D">
+</p>
 
 Made by and for Physics Laboratory students in IFSC, who can't use uncertainties.py because of mean’s absolute deviation used in its calculation.
 
@@ -22,25 +24,26 @@ To get this library on google colaboratory:
 
 ## Usage
 
-Just import with `from labfis import labfloat` and create an *labfloat* object as:
+Just import with `from labfis import labfloat` and create an *labfloat* object, as this exemple below:
 
-```
+```py
 >>> from labfis import labfloat
 >>> a = labfloat(1,3)
 >>> b = labfloat(2,4)
 >>> a*b
 (2 ± 7)
 ```
+Check the Wiki for more details
 
 ## Instalation
 
-Intstall master releases with:
+Intstall main releases with:
 
 ```
 pip install labfis
 ```
 
-Install development releases with:
+Install development version with:
 
 ```
 pip install git+https://github.com/phisgroup/labfis.py/tree/development
