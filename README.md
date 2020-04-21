@@ -12,16 +12,6 @@ The uncertainty calculations are in accordance with gaussian’s propagation, as
 
 Made by and for Physics Laboratory students in IFSC, who can't use uncertainties.py because of mean’s absolute deviation used in its calculation.
 
-To get this library on google colaboratory:
-
-```
-!curl --remote-name \
-
--H 'Accept: application/vnd.github.v3.raw' \
-
---location https://raw.githubusercontent.com/phisgroup/labfis.py/development/labfis/main.py
-```
-
 ## Usage
 
 Just import with `from labfis import labfloat` and create an *labfloat* object, as this exemple below:
