@@ -36,7 +36,7 @@ pip install labfis
 Install development version with:
 
 ```
-pip install git+https://github.com/phisgroup/labfis.py/tree/development
+pip install git+https://github.com/phisgroup/labfis.py@development
 ```
 
 ## References
