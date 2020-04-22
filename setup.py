@@ -56,11 +56,10 @@ classifiers = [
     'Operating System :: Microsoft :: Windows',
     'Operating System :: POSIX',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.8']
 
-python_ver = '>=2.7'
+python_ver = '>=3.6'
 
 setup(name=APP_NAME,
     version=version,

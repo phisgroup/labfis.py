@@ -5,7 +5,7 @@ class LabFloatError(Exception):
     def __init__(self, *args):
         if args:
             if args[0] == 0:
-                self.message = "Essa operação não é suportado nesta classe, apenas as operações mencionadas na apostila de Laboratório de Física 2 do IFSC."
+                self.message = "This operation is not supported."
             elif args[0] == 1:
                 self.message = "Too many args in list, expected '[...,[val,err],...]' got '{0}'".format(args[1])
             elif isinstance(args[0],str):
@@ -20,19 +20,31 @@ class LabFloatError(Exception):
             return 'LabFloatError has been raised'
 
 class labfloat:
-    def __init__(self, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):
         mean = kwargs.get('mean',0.0)
         uncertainty = kwargs.get('uncertainty',0.0)
 
         if args:
             if len(args) == 1:
-                mean = args[0]
+                if isinstance(args[0],list):
+                    return cls.list(args[0])
+                else:
+                    mean = args[0]
+
             elif len(args) == 2:
                 mean = args[0]
                 uncertainty = args[1]
             else:
                 raise LabFloatError("Too many arguments, expected (val,err) or ([(val,err),...]), got: ",args)
+        
+        if uncertainty == 0:
+            print("create float")
+            return float(mean)
+        else:
+            print("create uncertainty")
+            return object.__new__(cls)
 
+    def __init__(self, mean, uncertainty = 0.0):
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
 
@@ -72,11 +84,8 @@ class labfloat:
         return((m,u))
 
     def split(self):
-        if self.uncertainty == 0:
-            return(["{:g}".format(self.mean)])
-        else:
-            m, u = self.format()
-            return(["{:g}".format(m),"{:g}".format(u)])
+        m, u = self.format()
+        return(["{:g}".format(m),"{:g}".format(u)])
     
     def tex(self,*args,**kwargs):
         precision = kwargs.get('precision')
@@ -121,11 +130,7 @@ class labfloat:
             return("({0}\, \pm \,{1})".format(m, u))
 
     def __str__(self):
-        val = self.split()
-        if len(val) == 1:
-            return("{0}".format(val[0]))
-        else:
-            return("({0} ± {1})".format(*val))
+        return("({0} ± {1})".format(*self.split()))
 
     def __repr__(self):
         return self.__str__()
