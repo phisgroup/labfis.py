@@ -19,7 +19,7 @@ class LabFloatError(Exception):
         else:
             return 'LabFloatError has been raised'
 
-class labfloat:
+class LabFloat:
     def __new__(cls, *args, **kwargs):
         mean = kwargs.get('mean',0.0)
         uncertainty = kwargs.get('uncertainty',0.0)
@@ -44,7 +44,7 @@ class labfloat:
             print("create uncertainty")
             return object.__new__(cls)
 
-    def __init__(self, mean, uncertainty = 0.0):
+    def __init__(self, mean, uncertainty):
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
 
@@ -143,64 +143,64 @@ class labfloat:
         return self
 
     def __neg__(self):
-        return labfloat(-self.mean, self.uncertainty)
+        return LabFloat(-self.mean, self.uncertainty)
 
     def __abs__(self):
-        return labfloat(abs(self.mean), self.uncertainty)
+        return LabFloat(abs(self.mean), self.uncertainty)
 
     def __round__(self, n):
-        return labfloat(round(self.mean, n), round(self.uncertainty, n))
+        return LabFloat(round(self.mean, n), round(self.uncertainty, n))
 
     def __floor__(self):
-        return labfloat(floor(self.mean), floor(self.uncertainty))
+        return LabFloat(floor(self.mean), floor(self.uncertainty))
 
     def __ceil__(self):
-        return labfloat(ceil(self.mean), ceil(self.uncertainty))
+        return LabFloat(ceil(self.mean), ceil(self.uncertainty))
 
     def __trunc__(self):
-        return labfloat(trunc(self.mean), trunc(self.uncertainty))
+        return LabFloat(trunc(self.mean), trunc(self.uncertainty))
 
     def __eq__(self, other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return abs(self.mean - other.mean) < 2 * (self.uncertainty + other.uncertainty)
         if isinstance(other, Number):
             return abs(self.mean - other) < 2 * self.uncertainty
 
     def __ne__(self, other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return abs(self.mean - other.mean) > 3 * (self.uncertainty + other.uncertainty)
         if isinstance(other, Number):
             return abs(self.mean - other) > 3 * self.uncertainty
 
     def __lt__(self,other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return self.mean + self.uncertainty < other.mean - other.uncertainty
         if isinstance(other, Number):
             return self.mean + self.uncertainty < other
 
     def __gt__(self,other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return self.mean - self.uncertainty > other.mean + other.uncertainty
         if isinstance(other, Number):
             return self.mean - self.uncertainty > other
 
     def __le__(self,other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return self.mean + self.uncertainty <= other.mean + other.uncertainty
         if isinstance(other, Number):
             return self.mean + self.uncertainty <= other
 
     def __ge__(self,other):
-        if isinstance(other, labfloat):
+        if isinstance(other, LabFloat):
             return self.mean - self.uncertainty >= other.mean - other.uncertainty
         if isinstance(other, Number):
             return self.mean - self.uncertainty >= other
 
     def __add__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(self.mean + other.mean, sqrt(self.uncertainty ** 2 + other.uncertainty ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(self.mean + other.mean, sqrt(self.uncertainty ** 2 + other.uncertainty ** 2))
         if isinstance(other, Number):
-            return labfloat(self.mean + other, self.uncertainty)
+            return LabFloat(self.mean + other, self.uncertainty)
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -209,25 +209,25 @@ class labfloat:
         return self.__add__(other)
 
     def __sub__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(self.mean - other.mean, sqrt(self.uncertainty ** 2 + other.uncertainty ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(self.mean - other.mean, sqrt(self.uncertainty ** 2 + other.uncertainty ** 2))
         if isinstance(other, Number):
-            return labfloat(self.mean - other, self.uncertainty)
+            return LabFloat(self.mean - other, self.uncertainty)
 
     def __rsub__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(other.mean - self.mean, sqrt(other.uncertainty ** 2 + self.uncertainty ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(other.mean - self.mean, sqrt(other.uncertainty ** 2 + self.uncertainty ** 2))
         if isinstance(other, Number):
-            return labfloat(other - self.mean, self.uncertainty)
+            return LabFloat(other - self.mean, self.uncertainty)
 
     def __isub__(self, other):
         return self.__sub__(other)
 
     def __mul__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(self.mean * other.mean, sqrt((other.mean * self.uncertainty) ** 2 + (self.mean * other.uncertainty) ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(self.mean * other.mean, sqrt((other.mean * self.uncertainty) ** 2 + (self.mean * other.uncertainty) ** 2))
         if isinstance(other, Number):
-            return labfloat(self.mean * other, abs(other * self.uncertainty))
+            return LabFloat(self.mean * other, abs(other * self.uncertainty))
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -236,10 +236,10 @@ class labfloat:
         return self.__mul__(other)
 
     def __div__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(self.mean / other.mean, sqrt((self.uncertainty / other.mean) ** 2 + (self.mean * other.uncertainty / (other.mean ** 2)) ** 2 ))
+        if isinstance(other, LabFloat):
+            return LabFloat(self.mean / other.mean, sqrt((self.uncertainty / other.mean) ** 2 + (self.mean * other.uncertainty / (other.mean ** 2)) ** 2 ))
         if isinstance(other, Number):
-            return labfloat(self.mean / other, abs(self.uncertainty / other))
+            return LabFloat(self.mean / other, abs(self.uncertainty / other))
 
     def __truediv__(self, other):
         return self.__div__(other)
@@ -251,25 +251,25 @@ class labfloat:
         return self.__div__(other)
 
     def __rdiv__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(other.mean / self.mean, sqrt((other.uncertainty / self.mean) ** 2 + (other.mean * self.uncertainty / (self.mean ** 2)) ** 2 ))
+        if isinstance(other, LabFloat):
+            return LabFloat(other.mean / self.mean, sqrt((other.uncertainty / self.mean) ** 2 + (other.mean * self.uncertainty / (self.mean ** 2)) ** 2 ))
         if isinstance(other, Number):
-            return labfloat(other / self.mean, abs(other * self.uncertainty / self.mean ** 2))
+            return LabFloat(other / self.mean, abs(other * self.uncertainty / self.mean ** 2))
 
     def __rtruediv__(self, other):
         return self.__rdiv__(other)
 
     def __pow__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(self.mean ** other.mean, sqrt((other.mean * self.mean ** (other.mean - 1) * self.uncertainty) ** 2 + (self.mean ** other.mean * log(abs(self.mean)) * other.uncertainty) ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(self.mean ** other.mean, sqrt((other.mean * self.mean ** (other.mean - 1) * self.uncertainty) ** 2 + (self.mean ** other.mean * log(abs(self.mean)) * other.uncertainty) ** 2))
         if isinstance(other, Number):
-            return labfloat(self.mean ** other, abs(other * self.mean ** (other - 1) * self.uncertainty))
+            return LabFloat(self.mean ** other, abs(other * self.mean ** (other - 1) * self.uncertainty))
 
     def __rpow__(self, other):
-        if isinstance(other, labfloat):
-            raise labfloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
+        if isinstance(other, LabFloat):
+            raise LabFloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
         if isinstance(other, Number):
-            return labfloat(other ** self.mean, abs(other ** self.mean * log(abs(other)) * self.uncertainty))
+            return LabFloat(other ** self.mean, abs(other ** self.mean * log(abs(other)) * self.uncertainty))
 
     def __ipow__(self, other):
         return self.__pow__(other)

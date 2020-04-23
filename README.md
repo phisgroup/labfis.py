@@ -17,9 +17,9 @@ Made by and for Physics Laboratory students in IFSC, who can't use uncertainties
 Just import with `import labfis as lab` and create an *lab.float* object, as this exemple below:
 
 ```py
->>> import labfis as lab
->>> a = lab.float(1,3)
->>> b = lab.float(2,4)
+>>> from labfis import LabFloat
+>>> a = LabFloat(1,3)
+>>> b = LabFloat(2,4)
 >>> a*b
 (2 ± 7)
 ```
