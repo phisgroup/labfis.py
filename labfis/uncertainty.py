@@ -19,8 +19,8 @@ class LabFloatError(Exception):
         else:
             return 'LabFloatError has been raised'
 
-class LabFloat:
-    def __new__(cls, *args, **kwargs):
+def params(fnc):
+    def inner(cls, *args,**kwargs):
         mean = kwargs.get('mean',0.0)
         uncertainty = kwargs.get('uncertainty',0.0)
 
@@ -34,16 +34,20 @@ class LabFloat:
             elif len(args) == 2:
                 mean = args[0]
                 uncertainty = args[1]
-            else:
+            elif len(args) > 2:
                 raise LabFloatError("Too many arguments, expected (val,err) or ([(val,err),...]), got: ",args)
-        
-        if uncertainty == 0:
-            print("create float")
-            return float(mean)
-        else:
-            print("create uncertainty")
-            return object.__new__(cls)
+        if fnc.__name__ == "__new__":
+            return fnc(cls,mean)
+        elif fnc.__name__ == "__init__":
+            return fnc(cls, mean, uncertainty)
+    return inner
 
+class LabFloat(float):
+    @params
+    def __new__(cls, mean):
+        return float.__new__(cls, mean)
+
+    @params
     def __init__(self, mean, uncertainty):
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
@@ -85,11 +89,7 @@ class LabFloat:
 
     def split(self):
         m, u = self.format()
-        if self.uncertainty == 0:
-            return(["{:g}".format(self.mean)])
-        else:
-            m, u = self.format()
-            return(["{:g}".format(m),"{:g}".format(u)])
+        return(["{:g}".format(m),"{:g}".format(u)])
           
     def tex(self,*args,**kwargs):
         precision = kwargs.get('precision')
