@@ -14,7 +14,7 @@ Made by and for Physics Laboratory students in IFSC, who can't use uncertainties
 
 ## Usage
 
-Just import with `import labfis as lab` and create an *lab.float* object, as this exemple below:
+Just import with `from labfis import LabFloat` and create an *LabFloat* object, as this exemple below:
 
 ```py
 >>> from labfis import LabFloat
