@@ -77,7 +77,7 @@ class labfloat:
         else:
             m, u = self.format()
             return(["{:g}".format(m),"{:g}".format(u)])
-    
+          
     def tex(self,*args,**kwargs):
         precision = kwargs.get('precision')
         if args:
