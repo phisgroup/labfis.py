@@ -7,3 +7,4 @@ __version__ = '2.0.0'
 
 # Local imports
 from labfis.uncertainty import LabFloat
+LabFloat

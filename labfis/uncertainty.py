@@ -85,8 +85,12 @@ class LabFloat:
 
     def split(self):
         m, u = self.format()
-        return(["{:g}".format(m),"{:g}".format(u)])
-    
+        if self.uncertainty == 0:
+            return(["{:g}".format(self.mean)])
+        else:
+            m, u = self.format()
+            return(["{:g}".format(m),"{:g}".format(u)])
+          
     def tex(self,*args,**kwargs):
         precision = kwargs.get('precision')
         if args:
@@ -105,7 +109,7 @@ class LabFloat:
                 m = self.split()[0]
             m = m.split("e")
             if len(m) > 1:
-                m = m[0]+"\cdot 10^{"+m[1]+"}"
+                m = m[0]+r"\cdot 10^{"+m[1]+"}"
             else:
                 m = m[0]
             return("{0}".format(m))
@@ -120,14 +124,14 @@ class LabFloat:
             m = m.split("e")
             u = u.split("e")
             if len(m) > 1:
-                m = m[0]+"\cdot 10^{"+m[1]+"}"
+                m = m[0]+r"\cdot 10^{"+m[1]+"}"
             else:
                 m = m[0]
             if len(u) > 1:
-                u = u[0]+"\cdot 10^{"+u[1]+"}"
+                u = u[0]+r"\cdot 10^{"+u[1]+"}"
             else:
                 u = u[0]
-            return("({0}\, \pm \,{1})".format(m, u))
+            return(r"({0}\, \pm \,{1})".format(m, u))
 
     def __str__(self):
         return("({0} ± {1})".format(*self.split()))
@@ -266,8 +270,8 @@ class LabFloat:
             return LabFloat(self.mean ** other, abs(other * self.mean ** (other - 1) * self.uncertainty))
 
     def __rpow__(self, other):
-        if isinstance(other, LabFloat):
-            raise LabFloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
+        if isinstance(other, labfloat):
+            return labfloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
         if isinstance(other, Number):
             return LabFloat(other ** self.mean, abs(other ** self.mean * log(abs(other)) * self.uncertainty))
 
