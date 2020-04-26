@@ -19,36 +19,30 @@ class LabFloatError(Exception):
         else:
             return 'LabFloatError has been raised'
 
-def params(fnc):
-    def inner(cls, *args,**kwargs):
+class LabFloat(float):
+    def __new__(cls, *args,**kwargs):
+        mean = kwargs.get('mean',0.0)
+        if args:
+            if isinstance(args[0],list):
+                return cls.list(args[0])
+            else:
+                mean = args[0]
+
+        return float.__new__(cls,mean)
+
+    def __init__(self, *args,**kwargs):
         mean = kwargs.get('mean',0.0)
         uncertainty = kwargs.get('uncertainty',0.0)
 
         if args:
             if len(args) == 1:
-                if isinstance(args[0],list):
-                    return cls.list(args[0])
-                else:
-                    mean = args[0]
-
+                mean = args[0]
             elif len(args) == 2:
                 mean = args[0]
                 uncertainty = args[1]
             elif len(args) > 2:
                 raise LabFloatError("Too many arguments, expected (val,err) or ([(val,err),...]), got: ",args)
-        if fnc.__name__ == "__new__":
-            return fnc(cls,mean)
-        elif fnc.__name__ == "__init__":
-            return fnc(cls, mean, uncertainty)
-    return inner
 
-class LabFloat(float):
-    @params
-    def __new__(cls, mean):
-        return float.__new__(cls, mean)
-
-    @params
-    def __init__(self, mean, uncertainty):
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
 
