@@ -23,6 +23,7 @@ Just import with `from labfis import LabFloat` and create an *LabFloat* object, 
 >>> a*b
 (2 ± 7)
 ```
+
 Check the [Wiki]() for more details.
 
 ## Instalation
