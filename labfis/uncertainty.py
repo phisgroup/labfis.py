@@ -50,15 +50,15 @@ class LabFloat:
 
     @classmethod
     def list(cls,listargs):
-        listlabfloat = []
+        listLabFloat = []
         for j in range(len(listargs)):
             if len(listargs[j]) == 2:
-                listlabfloat += [cls(listargs[j][0],listargs[j][1])]
+                listLabFloat += [cls(listargs[j][0],listargs[j][1])]
             elif len(listargs[j]) == 1:
-                listlabfloat += [cls(listargs[j][0])]
+                listLabFloat += [cls(listargs[j][0])]
             elif len(listargs[j]) > 2:
                 raise LabFloatError(1,listargs[j])
-        return(listlabfloat)
+        return(listLabFloat)
 
     def format(self):
         su = "%.16f" % self.uncertainty
@@ -270,8 +270,8 @@ class LabFloat:
             return LabFloat(self.mean ** other, abs(other * self.mean ** (other - 1) * self.uncertainty))
 
     def __rpow__(self, other):
-        if isinstance(other, labfloat):
-            return labfloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
+        if isinstance(other, LabFloat):
+            return LabFloat(other.mean ** self.mean, sqrt((self.mean * other.mean ** (self.mean - 1) * other.uncertainty) ** 2 + (other.mean ** self.mean * log(abs(other.mean)) * self.uncertainty) ** 2))
         if isinstance(other, Number):
             return LabFloat(other ** self.mean, abs(other ** self.mean * log(abs(other)) * self.uncertainty))
 
