@@ -9,7 +9,7 @@ class LabFloatError(Exception):
             elif args[0] == 1:
                 self.message = "Too many arguments, expected '(val,err)' or '([(val,err),...])' , got: '{0}'".format(args[1])
             elif args[0] == 2:
-                self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(args[1,2])
+                self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(args[1:2])
             elif args[0] == 3:
                 self.message = "Uncertanty or mean list missing, expected: '[[val1,val2,...,valn],[err1,err2,...,errn],...]' , got: '{0}'".format(args[1])
             elif args[0] == 4:
