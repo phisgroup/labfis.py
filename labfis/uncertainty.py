@@ -7,26 +7,37 @@ class LabFloatError(Exception):
             if args[0] == 0:
                 self.message = "This operation is not supported."
             elif args[0] == 1:
-                self.message = "Too many args in list, expected '[...,[val,err],...]' got '{0}'".format(args[1])
+                self.message = "Too many arguments, expected '(val,err)' or '([(val,err),...])' , got: '{0}'".format(args[1])
+            elif args[0] == 2:
+                self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(args[1,2])
+            elif args[0] == 3:
+                self.message = "Uncertanty or mean list missing, expected: '[[val1,val2,...,valn],[err1,err2,...,errn],...]' , got: '{0}'".format(args[1])
+            elif args[0] == 4:
+                self.message = "Too many arguments, expected: '(precision)' or '(mean precision,err precision)' , got: '{0}'".format(args[1])
             elif isinstance(args[0],str):
-                self.message = "{0}{1}".format(args[0],args[1])
+                self.message = "{0}{1}".format(args[0],args[1:])
+            else:
+                self.message = None
         else:
             self.message = None
 
     def __str__(self):
         if self.message:
-            return '{0}'.format(self.message)
+            return self.message
         else:
-            return 'LabFloatError has been raised'
+            return 'A generic LabFloatError has been raised'
 
 class LabFloat():
     def __new__(cls, *args,**kwargs):
-        mean = kwargs.get('mean',0.0)
+        listlabfloat = kwargs.get('list',[])
         if args:
             if isinstance(args[0],list):
-                return cls.list(args[0])
-            else:
-                mean = args[0]
+                if len(args) > 1: 
+                    listlabfloat = [*args]
+                else:
+                    listlabfloat = args[0]
+        if listlabfloat:
+            return cls.list(listlabfloat)
 
         return object.__new__(cls)
 
@@ -41,7 +52,7 @@ class LabFloat():
                 mean = args[0]
                 uncertainty = args[1]
             elif len(args) > 2:
-                raise LabFloatError("Too many arguments, expected (val,err) or ([(val,err),...]), got: ",args)
+                raise LabFloatError(1,args)
 
         self.mean = float(mean)
         self.uncertainty = abs(float(uncertainty))
@@ -49,13 +60,17 @@ class LabFloat():
     @classmethod
     def list(cls,listargs):
         listLabFloat = []
-        for j in range(len(listargs)):
-            if len(listargs[j]) == 2:
-                listLabFloat += [cls(listargs[j][0],listargs[j][1])]
-            elif len(listargs[j]) == 1:
-                listLabFloat += [cls(listargs[j][0])]
-            elif len(listargs[j]) > 2:
-                raise LabFloatError(1,listargs[j])
+        if len(listargs) % 2 == 0:
+            for j in range(0,len(listargs),2):
+                if len(listargs[j]) == len(listargs[j+1]):
+                    colum = []
+                    for k in range(len(listargs[j])):
+                        colum += [cls(listargs[j][k],listargs[j+1][k])]
+                    listLabFloat += [colum]
+                else:
+                    raise LabFloatError(2,listargs[j],listargs[j+1])
+        else:
+            raise LabFloatError(3,listargs)
         return(listLabFloat)
 
     def format(self):
@@ -91,7 +106,7 @@ class LabFloat():
             if len(args) == 2:
                 precision = args
             elif len(args) > 2:
-                raise LabFloatError("Too many arguments, expected: (precision) or (mean precision,err precision) got: ",args)
+                raise LabFloatError(4,args)
             else:
                 precision = [args[0],args[0]]
 
