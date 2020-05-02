@@ -1,4 +1,4 @@
-from math import floor, ceil, trunc, log, log10, sqrt
+from math import floor, ceil, trunc, log, log10, sqrt, cos, sin, tan
 from numbers import Number
 
 class LabFloatError(Exception):
@@ -19,7 +19,7 @@ class LabFloatError(Exception):
         else:
             return 'LabFloatError has been raised'
 
-class LabFloat(float):
+class LabFloat():
     def __new__(cls, *args,**kwargs):
         mean = kwargs.get('mean',0.0)
         if args:
@@ -28,7 +28,7 @@ class LabFloat(float):
             else:
                 mean = args[0]
 
-        return float.__new__(cls,mean)
+        return object.__new__(cls)
 
     def __init__(self, *args,**kwargs):
         mean = kwargs.get('mean',0.0)
@@ -271,6 +271,18 @@ class LabFloat(float):
 
     def __ipow__(self, other):
         return self.__pow__(other)
+
+    def sqrt(self):
+        return self.__pow__(self, 0.5)
+
+    def cos(self):
+        return LabFloat(cos(self.mean),abs(-(sin(self.mean)) * self.uncertainty))
+    
+    def sin(self):
+        return LabFloat(sin(self.mean),abs(cos(self.mean) * self.uncertainty))
+
+    def tan(self):
+        return LabFloat(tan(self.mean), sqrt((cos(self.mean) ** -4) * self.uncertainty ** 2))
 
     def __int__(self):
         return int(self.mean)
