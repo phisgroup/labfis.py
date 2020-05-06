@@ -1,5 +1,6 @@
 from math import floor, ceil, trunc, log, log10, sqrt, cos, sin, tan
 from numbers import Number
+from numpy import ndarray
 
 class LabFloatError(Exception):
     def __init__(self, *args):
@@ -31,12 +32,12 @@ class labfloat:
     def __new__(cls, *args,**kwargs):
         listlabfloat = kwargs.get('list',[])
         if args:
-            if isinstance(args[0],list):
+            if isinstance(args[0],(list,ndarray)):
                 if len(args) > 1: 
                     listlabfloat = [*args]
                 else:
                     listlabfloat = args[0]
-        if listlabfloat:
+        if listlabfloat != []:
             return cls.list(listlabfloat)
 
         return object.__new__(cls)
@@ -59,19 +60,22 @@ class labfloat:
 
     @classmethod
     def list(cls,listargs):
-        listLabFloat = []
+        print(listargs)
+        listlabfloat = []
         if len(listargs) % 2 == 0:
             for j in range(0,len(listargs),2):
                 if len(listargs[j]) == len(listargs[j+1]):
                     colum = []
                     for k in range(len(listargs[j])):
                         colum += [cls(listargs[j][k],listargs[j+1][k])]
-                    listLabFloat += [colum]
+                    listlabfloat += [colum]
                 else:
                     raise LabFloatError(2,listargs[j],listargs[j+1])
         else:
             raise LabFloatError(3,listargs)
-        return(listLabFloat)
+        if len(listlabfloat) == 1:
+            listlabfloat = listlabfloat[0]
+        return(listlabfloat)
 
     def format(self):
         su = "%.16f" % self.uncertainty
