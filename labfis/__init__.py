@@ -3,8 +3,8 @@
 # Copyright © 2020 labfis.py
 # (see LICENSE for details)
 
-__version__ = '2.0.0'
+__version__ = '1.6.0'
 
 # Local imports
-from labfis.uncertainty import LabFloat
-LabFloat
+from labfis.uncertainty import labfloat
+labfloat
