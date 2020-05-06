@@ -33,12 +33,12 @@ class labfloat:
         listlabfloat = kwargs.get('list',[])
         if args:
             if isinstance(args[0],(list,ndarray)):
-                if len(args) > 1: 
-                    listlabfloat = [*args]
-                else:
-                    listlabfloat = args[0]
+                listlabfloat = args
         if listlabfloat != []:
-            return cls.list(listlabfloat)
+            if len(listlabfloat) % 2 == 0:
+                return cls.list(listlabfloat)
+            else:
+                raise LabFloatError(3,listlabfloat)
 
         return object.__new__(cls)
 
@@ -60,19 +60,15 @@ class labfloat:
 
     @classmethod
     def list(cls,listargs):
-        print(listargs)
         listlabfloat = []
-        if len(listargs) % 2 == 0:
-            for j in range(0,len(listargs),2):
-                if len(listargs[j]) == len(listargs[j+1]):
-                    colum = []
-                    for k in range(len(listargs[j])):
-                        colum += [cls(listargs[j][k],listargs[j+1][k])]
-                    listlabfloat += [colum]
-                else:
-                    raise LabFloatError(2,listargs[j],listargs[j+1])
-        else:
-            raise LabFloatError(3,listargs)
+        for j in range(0,len(listargs),2):
+            if len(listargs[j]) == len(listargs[j+1]):
+                colum = []
+                for k in range(len(listargs[j])):
+                    colum += [cls(listargs[j][k],listargs[j+1][k])]
+                listlabfloat += [colum]
+            else:
+                raise LabFloatError(2,listargs[j],listargs[j+1])
         if len(listlabfloat) == 1:
             listlabfloat = listlabfloat[0]
         return(listlabfloat)
@@ -292,7 +288,7 @@ class labfloat:
         return self.__pow__(other)
 
     def sqrt(self):
-        return self.__pow__(self, 0.5)
+        return self.__pow__(0.5)
 
     def cos(self):
         return labfloat(cos(self.mean),abs(-(sin(self.mean)) * self.uncertainty))
