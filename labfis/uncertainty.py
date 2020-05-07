@@ -1,6 +1,25 @@
+import logging
 from math import floor, ceil, trunc, log, log10, sqrt, cos, sin, tan
 from numbers import Number
-from numpy import ndarray
+
+logger = logging.getLogger(__name__)
+
+try:
+    import numpy
+except ImportError:
+    numpy = None
+    logger.warning('Faild to import numpy; sqrt, sin, cos, tan and numpy.ndarray list method wont function')
+
+def skipif(condition,message):
+    def decorator(fnc):
+        def wrapper(*args,**kwargs):
+            if condition:
+                return fnc(*args,**kwargs)
+            else:
+                logger.info(message)
+                pass
+        return wrapper
+    return decorator
 
 class LabFloatError(Exception):
     def __init__(self, *args):
@@ -32,8 +51,12 @@ class labfloat:
     def __new__(cls, *args,**kwargs):
         listlabfloat = kwargs.get('list',[])
         if args:
-            if isinstance(args[0],(list,ndarray)):
-                listlabfloat = args
+            if numpy:
+                if isinstance(args[0],(list,numpy.ndarray)):
+                    listlabfloat = args
+            else:
+                if isinstance(args[0],list):
+                    listlabfloat = args
         if listlabfloat != []:
             if len(listlabfloat) % 2 == 0:
                 return cls.list(listlabfloat)
@@ -287,15 +310,19 @@ class labfloat:
     def __ipow__(self, other):
         return self.__pow__(other)
 
+    @skipif(numpy,"The sqrt() method is not supported without numpy")
     def sqrt(self):
         return self.__pow__(0.5)
 
+    @skipif(numpy,"The cos() method is not supported without numpy")
     def cos(self):
         return labfloat(cos(self.mean),abs(-(sin(self.mean)) * self.uncertainty))
     
+    @skipif(numpy,"The sin() method is not supported without numpy")
     def sin(self):
         return labfloat(sin(self.mean),abs(cos(self.mean) * self.uncertainty))
 
+    @skipif(numpy,"The tan() method is not supported without numpy")
     def tan(self):
         return labfloat(tan(self.mean), sqrt((cos(self.mean) ** -4) * self.uncertainty ** 2))
 

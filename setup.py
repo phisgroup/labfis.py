@@ -59,7 +59,7 @@ classifiers = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.8']
 
-requirements = ['numpy']
+#requirements = ['numpy']
 
 python_ver = '>=3.6'
 
@@ -75,6 +75,6 @@ setup(name=APP_NAME,
     long_description_content_type="text/markdown",
     packages=find_packages(),
     classifiers=classifiers,
-    install_requires=requirements,
+#    install_requires=requirements,
     python_requires=python_ver,
 )
