@@ -14,12 +14,12 @@ Made by and for Physics Laboratory students in IFSC, who can't use uncertainties
 
 ## Usage
 
-Just import with `from labfis import LabFloat` and create an *LabFloat* object, as this exemple below:
+Just import with `from labfis import labfloat` and create an *labfloat* object, as this exemple below:
 
 ```py
->>> from labfis import LabFloat
->>> a = LabFloat(1,3)
->>> b = LabFloat(2,4)
+>>> from labfis import labfloat
+>>> a = labfloat(1,3)
+>>> b = labfloat(2,4)
 >>> a*b
 (2 ± 7)
 ```
