@@ -56,11 +56,12 @@ classifiers = [
     'Operating System :: Microsoft :: Windows',
     'Operating System :: POSIX',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.8']
 
-python_ver = '>=2.7'
+#requirements = ['numpy']
+
+python_ver = '>=3.6'
 
 setup(name=APP_NAME,
     version=version,
@@ -74,5 +75,6 @@ setup(name=APP_NAME,
     long_description_content_type="text/markdown",
     packages=find_packages(),
     classifiers=classifiers,
+#    install_requires=requirements,
     python_requires=python_ver,
 )
