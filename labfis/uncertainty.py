@@ -1,5 +1,6 @@
 import logging
-from math import floor, ceil, trunc, log, log10, sqrt, cos, sin, tan
+from math import (floor, ceil, trunc, log, log10, sqrt,
+                  cos, sin, tan, asin, acos, atan)
 from numbers import Number
 
 logger = logging.getLogger(__name__)
@@ -9,7 +10,7 @@ try:
 except ImportError:
     numpy = None
     logger.warning(
-        'Faild to import numpy; sqrt, sin, cos, tan and numpy.ndarray list method wont function')
+        'Faild to import numpy; sqrt, sin, cos, tan, arcsin, arccos, arctan and numpy.ndarray list method wont function')
 
 
 def skipif(condition, message):
@@ -337,6 +338,18 @@ class labfloat:
     @skipif(numpy, "The tan() method is not supported without numpy")
     def tan(self):
         return labfloat(tan(self.mean), sqrt((cos(self.mean) ** -4) * self.uncertainty ** 2))
+
+    @skipif(numpy, "The arcsin() method is not supported without numpy")
+    def arcsin(self):
+        return labfloat(asin(self.mean), self.uncertainty/sqrt(1 - self.mean ** 2))
+
+    @skipif(numpy, "The arccos() method is not supported without numpy")
+    def arccos(self):
+        return labfloat(acos(self.mean), abs(-self.uncertainty/sqrt(1 - self.mean ** 2)))
+
+    @skipif(numpy, "The arctan() method is not supported without numpy")
+    def arctan(self):
+        return labfloat(atan(self.mean), self.uncertainty/(1 + self.mean ** 2))
 
     def __int__(self):
         return int(self.mean)
