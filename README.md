@@ -1,5 +1,7 @@
 # labfis.py
 
+![Travis-CI](https://img.shields.io/travis/com/phisgroup/labfis/development?style=for-the-badge) ![PyPI](https://img.shields.io/pypi/v/labfis?style=for-the-badge) ![License](https://img.shields.io/github/license/phisgroup/labfis.py?style=for-the-badge)
+
 ## Description
 
 Small library (currently only one class) for uncertainty calculations and error propagation.
