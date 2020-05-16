@@ -63,4 +63,4 @@ def test_labfloat_expressions():
 
         print(result1, result2)
 
-        assert round(result2, 1) == round(result1, 1)
+        assert round(result2) == round(result1)
