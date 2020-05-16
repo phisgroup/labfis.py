@@ -13,5 +13,5 @@ python:
   - "pypy3"  # currently Python 3.6.1,  PyPy 7.1.1-beta0# command to run tests
 install:
   - pip install .
-script:
-  - pytest
+#script:
+#  - pytest
