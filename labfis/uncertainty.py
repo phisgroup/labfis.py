@@ -31,7 +31,7 @@ class LabFloatError(Exception):
             if args[0] == 0:
                 self.message = "This operation is not supported."
             elif args[0] == 1:
-                self.message = "Too many arguments, expected '(val,err)' or '([(val,err),...])' , got: '{0}'".format(
+                self.message = "Too many arguments, expected '(val,err)' or '([[val1,val2,...],[err1,err2,...],...]])' , got: '{0}'".format(
                     args[1])
             elif args[0] == 2:
                 self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(
