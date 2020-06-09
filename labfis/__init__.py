@@ -6,5 +6,7 @@
 __version__ = '1.2.0b'
 
 # Local imports
-from labfis.uncertainty import labfloat
+from labfis.uncertainty import labfloat, Infix
 labfloat
+
+u = Infix(lambda x,y: labfloat(x,y))
