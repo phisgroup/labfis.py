@@ -3,7 +3,7 @@
 # Copyright © 2020 labfis.py
 # (see LICENSE for details)
 
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 
 # Local imports
 from labfis.main import labfloat
