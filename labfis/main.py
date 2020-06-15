@@ -62,14 +62,11 @@ class labfloat:
             for digit in su:
                 if digit == "0":
                     r += 1
-                    print("zero", r)
                 elif digit == "9" and "1" in str(round(self.uncertainty,r)):
-                    print("yes", r)
                     m = round(self.mean, r-1)
                     u = round(self.uncertainty, r)
                     return((m,u))
                 elif digit != ".":
-                    print("Number")
                     m = round(self.mean, r)
                     u = round(self.uncertainty, r)
                     return((m,u))
