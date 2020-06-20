@@ -9,20 +9,6 @@ try:
     import numpy
 except ImportError:
     numpy = None
-    logger.warning(
-        'Faild to import numpy; sqrt, sin, cos, tan, arcsin, arccos, arctan and numpy.ndarray list method wont function')
-
-
-def skipif(condition, message):
-    def decorator(fnc):
-        def wrapper(*args, **kwargs):
-            if condition:
-                return fnc(*args, **kwargs)
-            else:
-                logger.info(message)
-                pass
-        return wrapper
-    return decorator
 
 
 class LabFloatError(Exception):
@@ -31,7 +17,7 @@ class LabFloatError(Exception):
             if args[0] == 0:
                 self.message = "This operation is not supported."
             elif args[0] == 1:
-                self.message = "Too many arguments, expected '(val,err)' or '([[val1,val2,...],[err1,err2,...],...]])' , got: '{0}'".format(
+                self.message = "Too many arguments, expected '(val,err)' or '([val1,val2,...],[err1,err2,...],...])' , got: '{0}'".format(
                     args[1])
             elif args[0] == 2:
                 self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(
@@ -323,31 +309,24 @@ class labfloat:
     def __ipow__(self, other):
         return self.__pow__(other)
 
-    @skipif(numpy, "The sqrt() method is not supported without numpy")
     def sqrt(self):
         return self.__pow__(0.5)
 
-    @skipif(numpy, "The cos() method is not supported without numpy")
     def cos(self):
         return labfloat(cos(self.mean), abs(-(sin(self.mean)) * self.uncertainty))
 
-    @skipif(numpy, "The sin() method is not supported without numpy")
     def sin(self):
         return labfloat(sin(self.mean), abs(cos(self.mean) * self.uncertainty))
 
-    @skipif(numpy, "The tan() method is not supported without numpy")
     def tan(self):
         return labfloat(tan(self.mean), sqrt((cos(self.mean) ** -4) * self.uncertainty ** 2))
 
-    @skipif(numpy, "The arcsin() method is not supported without numpy")
     def arcsin(self):
         return labfloat(asin(self.mean), self.uncertainty/sqrt(1 - self.mean ** 2))
 
-    @skipif(numpy, "The arccos() method is not supported without numpy")
     def arccos(self):
         return labfloat(acos(self.mean), abs(-self.uncertainty/sqrt(1 - self.mean ** 2)))
 
-    @skipif(numpy, "The arctan() method is not supported without numpy")
     def arctan(self):
         return labfloat(atan(self.mean), self.uncertainty/(1 + self.mean ** 2))
 
