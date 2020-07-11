@@ -11,6 +11,58 @@ except ImportError:
     numpy = None
 
 
+class Infix:
+    """definition of an Infix type operator class
+    also works in jython,
+    calling sequence for the infix is either:
+    x |infix| y
+    or:
+    x <<infix>> y"""
+
+    def __init__(self, function):
+        self.function = function
+
+    def __ror__(self, other):
+        return self.lbind(self.function, other)
+
+    def __or__(self, other):
+        return self.rbind(self.function, other)
+
+    def __rlshift__(self, other):
+        return self.lbind(self.function, other)
+
+    def __rshift__(self, other):
+        return self.rbind(self.function, other)
+
+    class rbind:
+        def __init__(self, function, binded):
+            self.function = function
+            self.binded = binded
+
+        def __ror__(self, other):
+            return self.function(other, self.binded)
+
+        def __rlshift__(self, other):
+            return self.function(other, self.binded)
+
+        def __call__(self, other):
+            return self.function(other, self.binded)
+
+    class lbind:
+        def __init__(self, function, binded):
+            self.function = function
+            self.binded = binded
+
+        def __or__(self, other):
+            return self.function(self.binded, other)
+
+        def __rshift__(self, other):
+            return self.function(self.binded, other)
+
+        def __call__(self, other):
+            return self.function(self.binded, other)
+
+
 class LabFloatError(Exception):
     def __init__(self, *args):
         if args:
