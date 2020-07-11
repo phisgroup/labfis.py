@@ -102,16 +102,16 @@ class labfloat:
         else:
             r = -i
             r += 1
-            for j in range(len(su)):
-                if su[j] == "0":
+            for digit in su:
+                if digit == "0":
                     r += 1
-                elif su[j+1] == "9" and r > 0:
-                    m = round(self._mean, r-1)
-                    u = round(self._uncertainty, r)
-                    return((m, u))
-                elif su[j] != ".":
-                    m = round(self._mean, r)
-                    u = round(self._uncertainty, r)
+                elif digit == "9" and "1" in str(round(self.uncertainty,r)):
+                    m = round(self.mean, r-1)
+                    u = round(self.uncertainty, r)
+                    return((m,u))
+                elif digit != ".":
+                    m = round(self.mean, r)
+                    u = round(self.uncertainty, r)
                     return((m, u))
 
         m = round(self._mean, r)
