@@ -1,5 +1,5 @@
 import logging
-from math import (floor, ceil, trunc, log, log10, sqrt,
+from math import (floor, ceil, trunc, log, sqrt,
                   cos, sin, tan, asin, acos, atan)
 from numbers import Number
 
@@ -90,8 +90,7 @@ class LabFloatError(Exception):
     def __str__(self):
         if self.message:
             return self.message
-        else:
-            return 'A generic LabFloatError has been raised'
+        return 'A generic LabFloatError has been raised'
 
 
 class labfloat:
@@ -105,10 +104,9 @@ class labfloat:
                 if isinstance(args[0], list):
                     listlabfloat = args
         if listlabfloat != []:
-            if len(listlabfloat) % 2 == 0:
-                return cls.list(listlabfloat)
-            else:
+            if len(listlabfloat) % 2 != 0:
                 raise LabFloatError(3, listlabfloat)
+            return cls.list(listlabfloat)
 
         return object.__new__(cls)
 
@@ -132,16 +130,16 @@ class labfloat:
     def list(cls, listargs):
         listlabfloat = []
         for j in range(0, len(listargs), 2):
-            if len(listargs[j]) == len(listargs[j+1]):
+            if len(listargs[j]) == len(listargs[j + 1]):
                 colum = []
                 for k in range(len(listargs[j])):
-                    colum += [cls(listargs[j][k], listargs[j+1][k])]
+                    colum += [cls(listargs[j][k], listargs[j + 1][k])]
                 listlabfloat += [colum]
             else:
-                raise LabFloatError(2, listargs[j], listargs[j+1])
+                raise LabFloatError(2, listargs[j], listargs[j + 1])
         if len(listlabfloat) == 1:
             listlabfloat = listlabfloat[0]
-        return(listlabfloat)
+        return listlabfloat
 
     def format(self):
         su = "%.16f" % self._uncertainty
@@ -150,29 +148,28 @@ class labfloat:
             r = - len(su) + 1
             m = round(self._mean, r)
             u = round(self._uncertainty, r)
-            return((m, u))
-        else:
-            r = -i
-            r += 1
-            for digit in su:
-                if digit == "0":
-                    r += 1
-                elif digit == "9" and "1" in str(round(self.uncertainty,r)):
-                    m = round(self.mean, r-1)
-                    u = round(self.uncertainty, r)
-                    return((m,u))
-                elif digit != ".":
-                    m = round(self.mean, r)
-                    u = round(self.uncertainty, r)
-                    return((m, u))
+            return (m, u)
+        r = -i
+        r += 1
+        for digit in su:
+            if digit == "0":
+                r += 1
+            elif digit == "9" and "1" in str(round(self.uncertainty, r)):
+                m = round(self.mean, r - 1)
+                u = round(self.uncertainty, r)
+                return (m, u)
+            elif digit != ".":
+                m = round(self.mean, r)
+                u = round(self.uncertainty, r)
+                return (m, u)
 
         m = round(self._mean, r)
         u = round(self._uncertainty, r)
-        return((m, u))
+        return (m, u)
 
     def split(self):
         m, u = self.format()
-        return(["{:g}".format(m), "{:g}".format(u)])
+        return ["{:g}".format(m), "{:g}".format(u)]
 
     def tex(self, *args, **kwargs):
         precision = kwargs.get('precision')
@@ -187,37 +184,37 @@ class labfloat:
         if self._uncertainty == 0:
             if precision:
                 precision[0] = str(precision[0])
-                m = eval("'{:."+precision[0]+"e}'.format(self._mean)")
+                m = eval("'{:." + precision[0] + "e}'.format(self._mean)")
             else:
                 m = self.split()[0]
             m = m.split("e")
             if len(m) > 1:
-                m = m[0]+r"\cdot 10^{"+m[1]+"}"
+                m = m[0] + r"\cdot 10^{" + m[1] + "}"
             else:
                 m = m[0]
-            return("{0}".format(m))
+            return "{0}".format(m)
+
+        if precision:
+            precision = (str(precision[0]), str(precision[1]))
+            m, u = self.format()
+            m = eval("'{:." + precision[0] + "e}'.format(m)")
+            u = eval("'{:." + precision[1] + "e}'.format(u)")
         else:
-            if precision:
-                precision = (str(precision[0]), str(precision[1]))
-                m, u = self.format()
-                m = eval("'{:."+precision[0]+"e}'.format(m)")
-                u = eval("'{:."+precision[1]+"e}'.format(u)")
-            else:
-                m, u = self.split()
-            m = m.split("e")
-            u = u.split("e")
-            if len(m) > 1:
-                m = m[0]+r"\cdot 10^{"+m[1]+"}"
-            else:
-                m = m[0]
-            if len(u) > 1:
-                u = u[0]+r"\cdot 10^{"+u[1]+"}"
-            else:
-                u = u[0]
-            return(r"({0}\, \pm \,{1})".format(m, u))
+            m, u = self.split()
+        m = m.split("e")
+        u = u.split("e")
+        if len(m) > 1:
+            m = m[0] + r"\cdot 10^{" + m[1] + "}"
+        else:
+            m = m[0]
+        if len(u) > 1:
+            u = u[0] + r"\cdot 10^{" + u[1] + "}"
+        else:
+            u = u[0]
+        return r"({0}\, \pm \,{1})".format(m, u)
 
     def __str__(self):
-        return("({0} ± {1})".format(*self.split()))
+        return "({0} ± {1})".format(*self.split())
 
     def __repr__(self):
         return self.__str__()
@@ -382,13 +379,13 @@ class labfloat:
         return labfloat(tan(self._mean), sqrt((cos(self._mean) ** -4) * self._uncertainty ** 2))
 
     def arcsin(self):
-        return labfloat(asin(self._mean), self._uncertainty/sqrt(1 - self._mean ** 2))
+        return labfloat(asin(self._mean), self._uncertainty / sqrt(1 - self._mean ** 2))
 
     def arccos(self):
-        return labfloat(acos(self._mean), abs(-self._uncertainty/sqrt(1 - self._mean ** 2)))
+        return labfloat(acos(self._mean), abs(-self._uncertainty / sqrt(1 - self._mean ** 2)))
 
     def arctan(self):
-        return labfloat(atan(self._mean), self._uncertainty/(1 + self._mean ** 2))
+        return labfloat(atan(self._mean), self._uncertainty / (1 + self._mean ** 2))
 
     def __int__(self):
         return int(self._mean)
