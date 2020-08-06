@@ -81,7 +81,7 @@ class LabFloatError(Exception):
                 self.message = "Too many arguments, expected: '(precision)' or '(mean precision,err precision)' , got: '{0}'".format(
                     args[1])
             elif isinstance(args[0], str):
-                self.message = "{0}{1}".format(args[0], args[1:])
+                self.message = args[0] % args[1:]
             else:
                 self.message = None
         else:
