@@ -69,13 +69,13 @@ class LabFloatError(Exception):
             if args[0] == 0:
                 self.message = "This operation is not supported."
             elif args[0] == 1:
-                self.message = "Too many arguments, expected '(val,err)' or '([val1,val2,...],[err1,err2,...],...])' , got: '{0}'".format(
+                self.message = "Too many arguments, expected '(val,err)' or '([val1,val2,...],[err1,err2,...],...)' , got: '{0}'".format(
                     args[1])
             elif args[0] == 2:
-                self.message = "Mean list and Uncertainty list must have the same size, expected: '[[val1,val2,...,valn],[err1,err2,...,errn]]' , got: '{0}'".format(
+                self.message = "Mean list and Uncertainty list must have the same size, expected: '[val1,val2,...,valn],[err1,err2,...,errn]' , got: '{0}'".format(
                     args[1:])
             elif args[0] == 3:
-                self.message = "Uncertanty or mean list missing, expected: '[[val1,val2,...,valn],[err1,err2,...,errn],...]' , got: '{0}'".format(
+                self.message = "Uncertanty or mean list missing, expected: '[*vals1],[*errs1],[*vals2],[*errs2],...,[*valsn],[*errsn]' , got: '{0}'".format(
                     args[1])
             elif args[0] == 4:
                 self.message = "Too many arguments, expected: '(precision)' or '(mean precision,err precision)' , got: '{0}'".format(
