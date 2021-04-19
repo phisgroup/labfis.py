@@ -11,28 +11,27 @@ def labfloat_iterative(vardic, exp):
     resulterror = 0
 
     for var in vardic.keys():
-        exec(var + "=" + "{0:.16f}".format(vardic[var][0]))
+        exec(var + "=" + 'vardic[var][0]')
 
     for var in vardic.keys():
         var_value = vardic[var][0]
         var_error = vardic[var][1]
 
-        exec(var + "=" + "{0:.16f}".format(var_value) +
-             "+" + "{0:.16f}".format(dx))
+        exec(var + "=" + 'var_value' +
+             "+" + 'dx')
         dph = eval(exp)
 
-        exec(var + "=" + "{0:.16f}".format(var_value))
+        exec(var + "=" + 'var_value')
         dpn = eval(exp)
 
         derivative = (dph - dpn)/dx
-        resulterror += (derivative * var_error) ** 2
+        resulterror += (derivative ** 2) * (var_error ** 2)
     return sqrt(resulterror)
 
 
 def labfloat_calc(vardic, exp):
     for var in vardic.keys():
-        exec(var + "=" +
-             "labfis.labfloat({0:.16f},{1:.16f})".format(*vardic[var]))
+        exec(var + "=" + "labfis.labfloat(vardic[var][0],vardic[var][1])")
     result = eval(exp)
     return result.uncertainty
 
