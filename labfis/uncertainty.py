@@ -2,6 +2,7 @@ import logging
 from math import (floor, ceil, trunc, log, sqrt,
                   cos, sin, tan, asin, acos, atan)
 from numbers import Number
+from decimal import Decimal, getcontext, setcontext, Context, ROUND_HALF_UP
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,8 @@ class LabFloatError(Exception):
 
 
 class labfloat:
+    context = Context(rounding=ROUND_HALF_UP)
+
     def __new__(cls, *args, **kwargs):
         listlabfloat = kwargs.get('list', [])
         if args:
@@ -123,8 +126,8 @@ class labfloat:
             elif len(args) > 2:
                 raise LabFloatError(1, args)
 
-        self._mean = float(mean)
-        self._uncertainty = abs(float(uncertainty))
+        self._mean = mean
+        self._uncertainty = abs(uncertainty)
 
     @classmethod
     def list(cls, listargs):
@@ -142,30 +145,18 @@ class labfloat:
         return listlabfloat
 
     def format(self):
-        su = "%.16f" % self._uncertainty
-        i = su.find(".")
-        if i == -1:
-            r = - len(su) + 1
-            m = round(self._mean, r)
-            u = round(self._uncertainty, r)
-            return (m, u)
-        r = -i
-        r += 1
-        for digit in su:
-            if digit == "0":
-                r += 1
-            elif digit == "9" and "1" in str(round(self.uncertainty, r)):
-                m = round(self.mean, r - 1)
-                u = round(self.uncertainty, r)
-                return (m, u)
-            elif digit != ".":
-                m = round(self.mean, r)
-                u = round(self.uncertainty, r)
-                return (m, u)
+        current_contex = getcontext()
+        setcontext(self.context)
+        
+        u = Decimal(self._uncertainty)
+        m = Decimal(self._mean)
 
-        m = round(self._mean, r)
-        u = round(self._uncertainty, r)
-        return (m, u)
+        u = round(u, -u.adjusted())
+        m = round(m, -u.adjusted())
+        
+        setcontext(current_contex)
+
+        return m, u
 
     def split(self):
         m, u = self.format()
