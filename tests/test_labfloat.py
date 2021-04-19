@@ -64,8 +64,10 @@ def test_labfloat_expressions():
         result1 = labfloat_iterative(vals, expression)
         result2 = labfloat_calc(vals, expression)
 
-        print(expression)
-        print(result1, result2)
-        print(round(result1), round(result2))
+        error = abs(result2 - result1)/result2
 
-        assert round(result2) == round(result1)
+        print(expression)
+        print(type(result1), type(result2))
+        print("numerical: {}".format(result1), "analitical: {}".format(result2))
+
+        assert error < 1e-5
