@@ -4,7 +4,7 @@ import itertools
 from math import sqrt
 import labfis
 
-dx = 1e-10
+dx = 1e-8
 
 
 def labfloat_iterative(vardic, exp):
