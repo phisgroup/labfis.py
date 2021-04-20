@@ -4,7 +4,7 @@
 
 ## Description
 
-Small library (currently only one class) for uncertainty calculations and error propagation.
+Small library for uncertainty calculations and error propagation.
 
 The uncertainty calculations are in accordance with gaussian’s propagation, as calculated by an analytical method:
 
