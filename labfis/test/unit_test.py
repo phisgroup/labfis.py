@@ -8,7 +8,7 @@ def test_infix():
 
 class TestInitialization():
     def test_empty_eq_zero(self):
-        assert labfloat() == labfloat(0, 0) == labfloat(0.0, 0.0)
+        assert labfloat() == labfloat(0, 0)
 
     def test_int_eq_float(self):
         assert labfloat(10, 2) == labfloat(10., 2.) 
