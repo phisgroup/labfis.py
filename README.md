@@ -6,11 +6,27 @@
 
 Small library for uncertainty calculations and error propagation.
 
-The uncertainty calculations are in accordance with gaussian’s propagation, as calculated by an analytical method:
+### Error propagation:
+
+The uncertainty is calculated analytically in accordance with the gaussian propagation:
 
 <p align="center">
 <img src="https://latex.codecogs.com/svg.latex?%5Cdpi%7B120%7D%20%5CDelta_f%20%3D%20%5Csqrt%7B%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%5Cright%29%5E2%7B%5CDelta_x%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%5Cright%29%5E2%7B%5CDelta_y%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%5Cright%29%5E2%7B%5CDelta_z%7D%5E2%20&plus;%20...%7D">
 </p>
+
+
+### To compare two labfloats it is used the following methods:
+
+Assuming:  
+<img src="https://latex.codecogs.com/svg.image?%5Cbg_white%20%5Cinline%20labfloat(x_i,%5Csigma_i)%5Cequiv%20x_i%20%5Cpm%20%5Csigma_i">
+
+- If they are equal they must satisfy:  
+<img src="https://latex.codecogs.com/svg.image?%5Cbg_white%20%5Cinline%20%5Cleft%7Cx_1%20-%20x_2%5Cright%7C%20%3C%202(%5Csigma_1%20&plus;%20%5Csigma_2)">
+ 
+- If they are different they must satisfy:  
+<img src="https://latex.codecogs.com/svg.image?%5Cbg_white%20%5Cinline%20%5Cleft%7Cx_1%20-%20x_2%5Cright%7C%20%3E%203(%5Csigma_1%20&plus;%20%5Csigma_2)">
+
+> **_NOTE:_**  Two labfloats can be not different and not equal at the same time by these methods.
 
 Made by and for Physics Laboratory students in IFSC, who can't use uncertainties.py because of mean’s absolute deviation used in its calculation.
 
@@ -57,3 +73,5 @@ pip install git+https://github.com/phisgroup/labfis.py@development
  11. ["Strategies for Variance Estimation"](http://www.sagepub.com/upm-data/6427_Chapter_4__Lee_%28Analyzing%29_I_PDF_6.pdf)  (PDF). p. 37. Retrieved  2013-01-18.
  12. Harris, Daniel C. (2003), [_Quantitative chemical analysis_](https://books.google.com/books?id=csTsQr-v0d0C&pg=PA56)(6th ed.), Macmillan, p. 56, [ISBN](https://en.wikipedia.org/wiki/ISBN_(identifier) "ISBN (identifier)")  [978-0-7167-4464-1](https://en.wikipedia.org/wiki/Special:BookSources/978-0-7167-4464-1 "Special:BookSources/978-0-7167-4464-1")
  13. ["Error Propagation tutorial"](http://www.foothill.edu/psme/daley/tutorials_files/10.%20Error%20Propagation.pdf)  (PDF).  _Foothill College_. October 9, 2009. Retrieved  2012-03-01.
+ 14. Helene,  O.;  Vanin,  V.. Tratamento  estatístico  de  dados  em  física experimental. São Paulo: Editora Edgard Blücher, 1981.
+ 15. Vuolo,  J.  E.. Fundamentos  da  teoria  de  erros.  2.  ed.  São  Paulo:  Editora Edgard Blücher, 1993. 
