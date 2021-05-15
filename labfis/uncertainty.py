@@ -144,22 +144,24 @@ class labfloat:
             listlabfloat = listlabfloat[0]
         return listlabfloat
 
-    def format(self):
+    def __round__(self, p=0):
         current_contex = getcontext()
         setcontext(self.context)
         
         u = Decimal(self._uncertainty)
         m = Decimal(self._mean)
 
-        u = round(u, -u.adjusted())
-        m = round(m, -u.adjusted())
+        p += -u.adjusted()*(not p)
+
+        u = round(u, p)
+        m = round(m, p)
         
         setcontext(current_contex)
 
         return m, u
 
     def split(self):
-        m, u = self.format()
+        m, u = self.__round__()
         return ["{:g}".format(m), "{:g}".format(u)]
 
     def tex(self, *args, **kwargs):
@@ -187,7 +189,7 @@ class labfloat:
 
         if precision:
             precision = (str(precision[0]), str(precision[1]))
-            m, u = self.format()
+            m, u = self.__round__()
             m = eval("'{:." + precision[0] + "e}'.format(m)")
             u = eval("'{:." + precision[1] + "e}'.format(u)")
         else:
@@ -230,9 +232,6 @@ class labfloat:
 
     def __abs__(self):
         return labfloat(abs(self._mean), self._uncertainty)
-
-    def __round__(self, n):
-        return labfloat(round(self._mean, n), round(self._uncertainty, n))
 
     def __floor__(self):
         return labfloat(floor(self._mean), floor(self._uncertainty))
