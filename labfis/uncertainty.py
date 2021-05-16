@@ -179,7 +179,7 @@ class labfloat:
         return self._uncertainty
 
     def __getitem__(self, idx):
-        vals = (self.uncertainty, self.mean)
+        vals = (self.mean, self.uncertainty)
         return vals[idx]
 
     def __pos__(self):
