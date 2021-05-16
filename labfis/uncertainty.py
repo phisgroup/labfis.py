@@ -147,18 +147,20 @@ class labfloat:
     def __round__(self, p=0):
         current_contex = getcontext()
         setcontext(self.context)
-        
+
         u = Decimal(self._uncertainty)
         m = Decimal(self._mean)
 
-        p += -u.adjusted()*(not p)
+        p += -u.adjusted() * (not p)
 
         u = round(u, p)
+        u += Decimal("1e{}".format(-p)) * (not u)
+
         m = round(m, p)
-        
+
         setcontext(current_contex)
 
-        return m, u
+        return labfloat(type(self._mean)(m), type(self._uncertainty)(u))
 
     def split(self):
         m, u = self.__round__()
