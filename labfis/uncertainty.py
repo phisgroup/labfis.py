@@ -1,6 +1,6 @@
 import logging
-from math import (floor, ceil, trunc, log, sqrt,
-                  cos, sin, tan, asin, acos, atan)
+from math import (floor, ceil, trunc, log, cos,
+                  sin, tan, asin, acos, atan)
 from numbers import Number
 from decimal import Decimal, getcontext, setcontext, Context, ROUND_HALF_UP
 
@@ -282,7 +282,7 @@ class labfloat:
 
     def __add__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(self._mean + other.mean, sqrt(self._uncertainty ** 2 + other.uncertainty ** 2))
+            return labfloat(self._mean + other.mean, (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(self._mean + other, self._uncertainty)
 
@@ -294,13 +294,13 @@ class labfloat:
 
     def __sub__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(self._mean - other.mean, sqrt(self._uncertainty ** 2 + other.uncertainty ** 2))
+            return labfloat(self._mean - other.mean, (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(self._mean - other, self._uncertainty)
 
     def __rsub__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(other.mean - self._mean, sqrt(other.uncertainty ** 2 + self._uncertainty ** 2))
+            return labfloat(other.mean - self._mean, (other.uncertainty ** 2 + self._uncertainty ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(other - self._mean, self._uncertainty)
 
@@ -309,7 +309,7 @@ class labfloat:
 
     def __mul__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(self._mean * other.mean, sqrt((other.mean * self._uncertainty) ** 2 + (self._mean * other.uncertainty) ** 2))
+            return labfloat(self._mean * other.mean, ((other.mean * self._uncertainty) ** 2 + (self._mean * other.uncertainty) ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(self._mean * other, abs(other * self._uncertainty))
 
@@ -321,7 +321,7 @@ class labfloat:
 
     def __div__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(self._mean / other.mean, sqrt((self._uncertainty / other.mean) ** 2 + (self._mean * other.uncertainty / (other.mean ** 2)) ** 2))
+            return labfloat(self._mean / other.mean, ((self._uncertainty / other.mean) ** 2 + (self._mean * other.uncertainty / (other.mean ** 2)) ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(self._mean / other, abs(self._uncertainty / other))
 
@@ -336,7 +336,7 @@ class labfloat:
 
     def __rdiv__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(other.mean / self._mean, sqrt((other.uncertainty / self._mean) ** 2 + (other.mean * self._uncertainty / (self._mean ** 2)) ** 2))
+            return labfloat(other.mean / self._mean, ((other.uncertainty / self._mean) ** 2 + (other.mean * self._uncertainty / (self._mean ** 2)) ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(other / self._mean, abs(other * self._uncertainty / self._mean ** 2))
 
@@ -345,13 +345,13 @@ class labfloat:
 
     def __pow__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(self._mean ** other.mean, sqrt((other.mean * self._mean ** (other.mean - 1) * self._uncertainty) ** 2 + (self._mean ** other.mean * log(abs(self._mean)) * other.uncertainty) ** 2))
+            return labfloat(self._mean ** other.mean, ((other.mean * self._mean ** (other.mean - 1) * self._uncertainty) ** 2 + (self._mean ** other.mean * log(abs(self._mean)) * other.uncertainty) ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(self._mean ** other, abs(other * self._mean ** (other - 1) * self._uncertainty))
 
     def __rpow__(self, other):
         if isinstance(other, labfloat):
-            return labfloat(other.mean ** self._mean, sqrt((self._mean * other.mean ** (self._mean - 1) * other.uncertainty) ** 2 + (other.mean ** self._mean * log(abs(other.mean)) * self._uncertainty) ** 2))
+            return labfloat(other.mean ** self._mean, ((self._mean * other.mean ** (self._mean - 1) * other.uncertainty) ** 2 + (other.mean ** self._mean * log(abs(other.mean)) * self._uncertainty) ** 2) ** 0.5)
         if isinstance(other, Number):
             return labfloat(other ** self._mean, abs(other ** self._mean * log(abs(other)) * self._uncertainty))
 
@@ -368,13 +368,13 @@ class labfloat:
         return labfloat(sin(self._mean), abs(cos(self._mean) * self._uncertainty))
 
     def tan(self):
-        return labfloat(tan(self._mean), sqrt((cos(self._mean) ** -4) * self._uncertainty ** 2))
+        return labfloat(tan(self._mean), ((cos(self._mean) ** -4) * self._uncertainty ** 2) ** 0.5)
 
     def arcsin(self):
-        return labfloat(asin(self._mean), self._uncertainty / sqrt(1 - self._mean ** 2))
+        return labfloat(asin(self._mean), self._uncertainty / (1 - self._mean ** 2))
 
     def arccos(self):
-        return labfloat(acos(self._mean), abs(-self._uncertainty / sqrt(1 - self._mean ** 2)))
+        return labfloat(acos(self._mean), abs(-self._uncertainty / (1 - self._mean ** 2)) ** 0.5)
 
     def arctan(self):
         return labfloat(atan(self._mean), self._uncertainty / (1 + self._mean ** 2))
