@@ -61,7 +61,7 @@ classifiers = [
 
 #requirements = ['numpy']
 
-python_ver = '>=3.6'
+python_ver = '>=3.7'
 
 setup(name=APP_NAME,
     version=version,
