@@ -252,27 +252,29 @@ class labfloat:
         m, u = self.__round__()
         return ["{:g}".format(m), "{:g}".format(u)]
 
-    def tex(self, precision: Union[Set[int], int] = None, round_p: int = 0) -> str:
+    def tex(self, precision: Union[Tuple[float], float] = None, round_p: int = 0) -> str:
         """Convert labfloat to string representation in LaTex format.
 
-        Precision and round_p is used to configure the display precision and round
-        decimal places.
+        The arguments precision and round_p are used to configure the display precision and round
+        decimal places. The precision is a float in "0.0" format.
 
         Args:
-            precision (Union[Set[int], int], optional): [description]. Defaults to None.
-            round_p (int, optional): [description]. Defaults to 0.
+            precision (Union[Tuple[float], float], optional): A tuple containing the mean's and error's precision or only one string for both precisions. If no value are passed the default precision. Defaults to None.
+            round_p (int, optional): Number of decimals to use when rounding. Defaults to 0.
 
         Raises:
-            LabFloatError: [description]
+            LabFloatError: Error in parsing arguments, where the number of precision tuple is greater than 2.
 
         Returns:
-            str: [description]
+            str: labfloat's strig representation in LaTex format.
 
         """
-        if len(precision) > 2:
-            raise LabFloatError(4, precision)
-
-        precision = [precision[0], precision[0]]
+        if isinstance(precision, tuple):
+            if len(precision) > 2:
+                raise LabFloatError(4, precision)
+            precision = (float(precision[0]), float(precision[1]))
+        elif precision:
+            precision = (float(precision), float(precision))
 
         if self._uncertainty == 0:
             if precision:
@@ -337,7 +339,7 @@ class labfloat:
         """object: labfloat's error."""
         return self._uncertainty
 
-    def __getitem__(self, idx: int) -> Set[object]:
+    def __getitem__(self, idx: int) -> Tuple[object]:
         """Represent the labfloat as an tuple.
 
         This method indexes the labfloat's attributes mean and erro as an tuple object.
@@ -347,7 +349,7 @@ class labfloat:
             idx (int): idex position of the labfis tuple representation
 
         Returns:
-            Set[object]: [description]
+            Tuple[object]: A tuple with labfloat's mean and error.
 
         Example:
             >>> a, b = labfloat(1,3)
