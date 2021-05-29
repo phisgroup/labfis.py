@@ -8,10 +8,10 @@ Small library for uncertainty calculations and error propagation.
 
 ### Error propagation:
 
-The uncertainty is calculated analytically in accordance with the gaussian propagation:
+The uncertainty is calculated analytically in accordance with the gaussian propagation aproximation established by the [International Bureau of Weights and Measures (BIPM)](https://www.bipm.org/):
 
 <p align="center">
-<img src="https://latex.codecogs.com/svg.latex?%5Cdpi%7B120%7D%20%5CDelta_f%20%3D%20%5Csqrt%7B%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%5Cright%29%5E2%7B%5CDelta_x%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%5Cright%29%5E2%7B%5CDelta_y%7D%5E2%20&plus;%20%5Cleft%28%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%5Cright%29%5E2%7B%5CDelta_z%7D%5E2%20&plus;%20...%7D">
+<img src="https://latex.codecogs.com/svg.image?%5Cbg_white%20%5Csigma_f%20=%20%5Csqrt%7B%5Cleft%20(%20%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20x%7D%20%5Cright%20)%5E2%20%5Csigma_x%5E2%20&plus;%20%5Cleft%20(%20%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20y%7D%20%5Cright%20)%5E2%20%5Csigma_y%5E2%20&plus;%20%5Cleft%20(%20%5Cfrac%7B%5Cpartial%20f%7D%7B%5Cpartial%20z%7D%20%5Cright%20)%5E2%20%5Csigma_z%5E2%20&plus;%20...%7D">
 </p>
 
 
