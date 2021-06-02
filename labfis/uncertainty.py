@@ -1,9 +1,8 @@
 from __future__ import annotations
 import logging
 from collections.abc import Iterable
-from typing import Union, Tuple, List, Set
-from math import (floor, ceil, trunc, log, cos,
-                  sin, tan, asin, acos, atan)
+from typing import Union, Tuple, List
+from math import floor, ceil, trunc, log, cos, sin, tan, asin, acos, atan
 from numbers import Number
 from decimal import Decimal, getcontext, setcontext, Context, ROUND_HALF_UP
 
@@ -69,16 +68,20 @@ class LabFloatError(Exception):
                 self.message = "This operation is not supported."
             elif args[0] == 1:
                 self.message = "Too many arguments, expected '(val,err)' or '([val1,val2,...],[err1,err2,...],...)' , got: '{0}'".format(
-                    args[1])
+                    args[1]
+                )
             elif args[0] == 2:
                 self.message = "Mean list and Uncertainty list must have the same size, expected: '[val1,val2,...,valn],[err1,err2,...,errn]' , got: '{0}'".format(
-                    args[1:])
+                    args[1:]
+                )
             elif args[0] == 3:
                 self.message = "Uncertanty or mean list missing, expected: '[*vals1],[*errs1],[*vals2],[*errs2],...,[*valsn],[*errsn]' , got: '{0}'".format(
-                    args[1])
+                    args[1]
+                )
             elif args[0] == 4:
                 self.message = "Too many arguments, expected: '(precision)' or '(mean precision,err precision)' , got: '{0}'".format(
-                    args[1])
+                    args[1]
+                )
             elif isinstance(args[0], str):
                 self.message = args[0] % args[1:]
             else:
@@ -89,7 +92,7 @@ class LabFloatError(Exception):
     def __str__(self):
         if self.message:
             return self.message
-        return 'A generic LabFloatError has been raised'
+        return "A generic LabFloatError has been raised"
 
 
 class labfloat:
@@ -132,7 +135,7 @@ class labfloat:
             >>> labfloat([15,16,17,18],[10,10,10,10],[16,17,18,19],[10,10,10,10])
 
         """
-        listlabfloat = kwargs.get('list', [])
+        listlabfloat = kwargs.get("list", [])
         if args:
             if isinstance(args[0], Iterable):
                 listlabfloat = args
@@ -164,8 +167,8 @@ class labfloat:
 
         """
         # NOTE: docstring the same as __new__ method due to editor only showing __init__ docstring.
-        mean = kwargs.get('mean', 0.0)
-        uncertainty = kwargs.get('uncertainty', 0.0)
+        mean = kwargs.get("mean", 0.0)
+        uncertainty = kwargs.get("uncertainty", 0.0)
 
         if args:
             if len(args) == 1:
@@ -252,7 +255,9 @@ class labfloat:
         m, u = self.__round__()
         return ["{:g}".format(m), "{:g}".format(u)]
 
-    def tex(self, precision: Union[Tuple[float], float] = None, round_p: int = 0) -> str:
+    def tex(
+        self, precision: Union[Tuple[float], float] = None, round_p: int = 0
+    ) -> str:
         """Convert labfloat to string representation in LaTex format.
 
         The arguments precision and round_p are used to configure the display precision and round
@@ -380,7 +385,9 @@ class labfloat:
 
     def __eq__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return abs(self._mean - other.mean) < 2 * (self._uncertainty + other.uncertainty)
+            return abs(self._mean - other.mean) < 2 * (
+                self._uncertainty + other.uncertainty
+            )
         if isinstance(other, Number):
             return abs(self._mean - other) < 2 * self._uncertainty
 
@@ -388,10 +395,12 @@ class labfloat:
 
     def __ne__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return abs(self._mean - other.mean) > 3 * (self._uncertainty + other.uncertainty)
+            return abs(self._mean - other.mean) > 3 * (
+                self._uncertainty + other.uncertainty
+            )
         if isinstance(other, Number):
             return abs(self._mean - other) > 3 * self._uncertainty
-        
+
         return None
 
     def __lt__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -423,12 +432,15 @@ class labfloat:
             return self._mean - self._uncertainty >= other.mean - other.uncertainty
         if isinstance(other, Number):
             return self._mean - self._uncertainty >= other
-        
+
         return None
 
     def __add__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(self._mean + other.mean, (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5)
+            return labfloat(
+                self._mean + other.mean,
+                (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5,
+            )
         if isinstance(other, Number):
             return labfloat(self._mean + other, self._uncertainty)
 
@@ -442,18 +454,24 @@ class labfloat:
 
     def __sub__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(self._mean - other.mean, (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5)
+            return labfloat(
+                self._mean - other.mean,
+                (self._uncertainty ** 2 + other.uncertainty ** 2) ** 0.5,
+            )
         if isinstance(other, Number):
             return labfloat(self._mean - other, self._uncertainty)
-        
+
         return None
 
     def __rsub__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(other.mean - self._mean, (other.uncertainty ** 2 + self._uncertainty ** 2) ** 0.5)
+            return labfloat(
+                other.mean - self._mean,
+                (other.uncertainty ** 2 + self._uncertainty ** 2) ** 0.5,
+            )
         if isinstance(other, Number):
             return labfloat(other - self._mean, self._uncertainty)
-        
+
         return None
 
     def __isub__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -461,10 +479,17 @@ class labfloat:
 
     def __mul__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(self._mean * other.mean, ((other.mean * self._uncertainty) ** 2 + (self._mean * other.uncertainty) ** 2) ** 0.5)
+            return labfloat(
+                self._mean * other.mean,
+                (
+                    (other.mean * self._uncertainty) ** 2
+                    + (self._mean * other.uncertainty) ** 2
+                )
+                ** 0.5,
+            )
         if isinstance(other, Number):
             return labfloat(self._mean * other, abs(other * self._uncertainty))
-        
+
         return None
 
     def __rmul__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -475,10 +500,17 @@ class labfloat:
 
     def __div__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(self._mean / other.mean, ((self._uncertainty / other.mean) ** 2 + (self._mean * other.uncertainty / (other.mean ** 2)) ** 2) ** 0.5)
+            return labfloat(
+                self._mean / other.mean,
+                (
+                    (self._uncertainty / other.mean) ** 2
+                    + (self._mean * other.uncertainty / (other.mean ** 2)) ** 2
+                )
+                ** 0.5,
+            )
         if isinstance(other, Number):
             return labfloat(self._mean / other, abs(self._uncertainty / other))
-        
+
         return None
 
     def __truediv__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -492,10 +524,19 @@ class labfloat:
 
     def __rdiv__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(other.mean / self._mean, ((other.uncertainty / self._mean) ** 2 + (other.mean * self._uncertainty / (self._mean ** 2)) ** 2) ** 0.5)
+            return labfloat(
+                other.mean / self._mean,
+                (
+                    (other.uncertainty / self._mean) ** 2
+                    + (other.mean * self._uncertainty / (self._mean ** 2)) ** 2
+                )
+                ** 0.5,
+            )
         if isinstance(other, Number):
-            return labfloat(other / self._mean, abs(other * self._uncertainty / self._mean ** 2))
-        
+            return labfloat(
+                other / self._mean, abs(other * self._uncertainty / self._mean ** 2)
+            )
+
         return None
 
     def __rtruediv__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -503,18 +544,50 @@ class labfloat:
 
     def __pow__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(self._mean ** other.mean, ((other.mean * self._mean ** (other.mean - 1) * self._uncertainty) ** 2 + (self._mean ** other.mean * log(abs(self._mean)) * other.uncertainty) ** 2) ** 0.5)
+            return labfloat(
+                self._mean ** other.mean,
+                (
+                    (other.mean * self._mean ** (other.mean - 1) * self._uncertainty)
+                    ** 2
+                    + (
+                        self._mean ** other.mean
+                        * log(abs(self._mean))
+                        * other.uncertainty
+                    )
+                    ** 2
+                )
+                ** 0.5,
+            )
         if isinstance(other, Number):
-            return labfloat(self._mean ** other, abs(other * self._mean ** (other - 1) * self._uncertainty))
-        
+            return labfloat(
+                self._mean ** other,
+                abs(other * self._mean ** (other - 1) * self._uncertainty),
+            )
+
         return None
 
     def __rpow__(self, other: Union[labfloat, Number]) -> labfloat:
         if isinstance(other, labfloat):
-            return labfloat(other.mean ** self._mean, ((self._mean * other.mean ** (self._mean - 1) * other.uncertainty) ** 2 + (other.mean ** self._mean * log(abs(other.mean)) * self._uncertainty) ** 2) ** 0.5)
+            return labfloat(
+                other.mean ** self._mean,
+                (
+                    (self._mean * other.mean ** (self._mean - 1) * other.uncertainty)
+                    ** 2
+                    + (
+                        other.mean ** self._mean
+                        * log(abs(other.mean))
+                        * self._uncertainty
+                    )
+                    ** 2
+                )
+                ** 0.5,
+            )
         if isinstance(other, Number):
-            return labfloat(other ** self._mean, abs(other ** self._mean * log(abs(other)) * self._uncertainty))
-        
+            return labfloat(
+                other ** self._mean,
+                abs(other ** self._mean * log(abs(other)) * self._uncertainty),
+            )
+
         return None
 
     def __ipow__(self, other: Union[labfloat, Number]) -> labfloat:
@@ -530,13 +603,17 @@ class labfloat:
         return labfloat(sin(self._mean), abs(cos(self._mean) * self._uncertainty))
 
     def tan(self) -> labfloat:
-        return labfloat(tan(self._mean), ((cos(self._mean) ** -4) * self._uncertainty ** 2) ** 0.5)
+        return labfloat(
+            tan(self._mean), ((cos(self._mean) ** -4) * self._uncertainty ** 2) ** 0.5
+        )
 
     def arcsin(self) -> labfloat:
         return labfloat(asin(self._mean), self._uncertainty / (1 - self._mean ** 2))
 
     def arccos(self) -> labfloat:
-        return labfloat(acos(self._mean), abs(-self._uncertainty / (1 - self._mean ** 2)) ** 0.5)
+        return labfloat(
+            acos(self._mean), abs(-self._uncertainty / (1 - self._mean ** 2)) ** 0.5
+        )
 
     def arctan(self) -> labfloat:
         return labfloat(atan(self._mean), self._uncertainty / (1 + self._mean ** 2))

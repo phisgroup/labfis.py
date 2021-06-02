@@ -3,12 +3,20 @@ from labfis import labfloat
 
 
 def test_zeros():
-    zeros = [labfloat(), labfloat(0), labfloat(0.), labfloat(0, 0),
-             labfloat(0., 0.), labfloat(0., 0), labfloat(0, 0.)]
+    zeros = [
+        labfloat(),
+        labfloat(0),
+        labfloat(0.0),
+        labfloat(0, 0),
+        labfloat(0.0, 0.0),
+        labfloat(0.0, 0),
+        labfloat(0, 0.0),
+    ]
 
     for z1, z2 in combinations(zeros, 2):
         print(z1, z2)
         assert list(z1) == list(z2)
+
 
 def test_indexing():
     assert labfloat(10, 2)[:] == (10, 2)
@@ -33,5 +41,6 @@ def TestUnary():
         y = labfloat(243, -2)
 
         assert list(x) == list(y)
+
 
 # TODO: test cases for other arithmetic operators
