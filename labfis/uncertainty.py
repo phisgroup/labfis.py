@@ -232,12 +232,15 @@ class labfloat:
         u = Decimal(self._uncertainty)
         m = Decimal(self._mean)
 
-        p += -u.adjusted() * (not p)
+        r = p - u.adjusted() * (not p)
 
-        u = round(u, p)
-        u += Decimal("1e{}".format(-p)) * (not u)
+        u = round(u, r)
 
-        m = round(m, p)
+        r = p - u.adjusted() * (not p)
+
+        u += Decimal("1e{}".format(-r)) * (not u)
+
+        m = round(m, r)
 
         setcontext(current_contex)
 
