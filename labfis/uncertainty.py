@@ -229,8 +229,8 @@ class labfloat:
         current_contex = getcontext()
         setcontext(self.context)
 
-        u = Decimal(self._uncertainty)
-        m = Decimal(self._mean)
+        u = Decimal(str(self._uncertainty))
+        m = Decimal(str(self._mean))
 
         r = p - u.adjusted() * (not p)
 
