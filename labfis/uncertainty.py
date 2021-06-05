@@ -238,7 +238,7 @@ class labfloat:
 
         r = p or -u.adjusted()
 
-        u += Decimal("1e{}".format(-r)) * (not u) * bool(m)
+        u += Decimal("1e{}".format(-r)) * (not u) * bool(p)
 
         m = round(m, r)
 
