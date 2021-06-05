@@ -113,9 +113,6 @@ class labfloat:
 
     """
 
-    context = Context(rounding=ROUND_HALF_UP)
-    """Context: Set ROUND_HALF_UP for the decimals used in __round__ method."""
-
     def __new__(cls, *args, **kwargs) -> Union[object, Iterable]:
         """Create an instance of labfloat or a nested list of labfloat.
 
@@ -169,6 +166,8 @@ class labfloat:
         # NOTE: docstring the same as __new__ method due to editor only showing __init__ docstring.
         mean = kwargs.get("mean", 0.0)
         uncertainty = kwargs.get("uncertainty", 0.0)
+        self.type = kwargs.get("type", float)
+        self.rounding = kwargs.get("rounding", ROUND_HALF_UP)
 
         if args:
             if len(args) == 1:
@@ -179,8 +178,8 @@ class labfloat:
             elif len(args) > 2:
                 raise LabFloatError(1, args)
 
-        self._mean = mean
-        self._uncertainty = abs(uncertainty)
+        self._mean = self.type(mean)
+        self._uncertainty = abs(self.type(uncertainty))
 
     @classmethod
     def list(cls, listargs: Iterable) -> Iterable:
@@ -227,7 +226,8 @@ class labfloat:
 
         """
         current_contex = getcontext()
-        setcontext(self.context)
+        current_rouding = current_contex.rounding
+        current_contex.rounding = self.rounding
 
         u = Decimal(str(self._uncertainty))
         m = Decimal(str(self._mean))
@@ -242,9 +242,9 @@ class labfloat:
 
         m = round(m, r)
 
-        setcontext(current_contex)
+        current_contex.rounding = current_rouding
 
-        return labfloat(type(self._mean)(m), type(self._uncertainty)(u))
+        return labfloat(mean=self.type(m), uncertainty=self.type(u))
 
     def split(self) -> List[str]:
         """Split the string representation of labfloat.
