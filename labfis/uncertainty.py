@@ -148,7 +148,15 @@ class labfloat:
 
         If one or more list is passed as an argument, it will call labfloat.list()
         to convert the nested list and return the nested list of labfloats. Or else,
-        it will create an single instance of labfloat.
+        it will create an single instance of labfloat. A type parameter can be explicitly
+        provided to use a custom number type instead of float. And also, rouding parameter
+        can be explicitly provided to change the rounding method from ROUND_HALF_UP.
+
+        Args:
+            mean (Number, optional): labfloat's mean. Defaults to 0.
+            uncertainty (Number, optional): labfloat's error. Defaults to 0.
+            type (Class, optional): Type of object that is passed for mean and error. Defaults to float.
+            rounding (str, optional): Rouding type. Defaults to ROUND_HALF_UP.
 
         Raises:
             LabFloatError: Missing errors or means list to convert nested list.
@@ -213,10 +221,10 @@ class labfloat:
 
         When no arguments are passed or p=0, the mean and uncertainty will round at the
         uncertainty most significant figure to nearest with ties going away from zero
-        (Round half away from zero) using Python's ROUND_HALF_UP. If a value is passe to
-        p it will round at p decimal places, and if p is greater than the error's most
-        significant figure decimal place, the error will be one at the mean's least
-        significant figure decimal place.
+        (Round half away from zero) using Python's ROUND_HALF_UP if no rouding parameter
+        was provided. If parameter p was provided it will round at p decimal places, and
+        if p is greater than the error's most significant figure decimal place, the error
+        will be one at the mean's least significant figure decimal place.
 
         Args:
             p (int, optional): The number of decimals to use when rounding. Defaults to 0.
